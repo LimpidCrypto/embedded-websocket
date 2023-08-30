@@ -30,7 +30,7 @@ log = "0.4.14"
 env_logger = "0.9.0"
 static_cell = { version = "1.1", features = ["nightly"] }
 
-[dependencies.embassy-executor]
+[dev-dependencies.embassy-executor]
 git = "https://github.com/embassy-rs/embassy.git"
 package = "embassy-executor"
 version = "0.3.0"
@@ -43,13 +43,13 @@ features = [
     "integrated-timers",
 ]
 
-[dependencies.embassy-time]
+[dev-dependencies.embassy-time]
 git = "https://github.com/embassy-rs/embassy.git"
 package = "embassy-time"
 # rev = "a2c718f61c0587e19d10c5c86ff4cd79272e2b87"
 features = ["log", "std", "nightly"]
 
-[dependencies.embassy-net]
+[dev-dependencies.embassy-net]
 git = "https://github.com/embassy-rs/embassy.git"
 package = "embassy-net"
 version = "0.1.0"
@@ -67,7 +67,7 @@ features = [
     "proto-ipv6",
 ]
 
-[dependencies.embassy-net-driver]
+[dev-dependencies.embassy-net-driver]
 git = "https://github.com/embassy-rs/embassy.git"
 package = "embassy-net-driver"
 # rev = "83ff3cbc69875f93c5a9bb36825c12df39f04f71"
