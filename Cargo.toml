@@ -81,8 +81,8 @@ package = "embassy-net-tuntap"
 # see readme for no_std support
 [features]
 default = ["std"]
-# default = []
-std = []
+
+std = ["httparse/std"]
 embedded-io-async = ["dep:embedded-io-async"]
 
 [[example]]
