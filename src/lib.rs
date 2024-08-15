@@ -12,6 +12,7 @@
 // support for websockets without using the standard library
 #![cfg_attr(not(feature = "std"), no_std)]
 
+use base64::EncodeSliceError;
 use byteorder::{BigEndian, ByteOrder};
 use core::{cmp, result, str};
 use heapless::{String, Vec};
@@ -210,6 +211,13 @@ pub enum Error {
     ConvertInfallible,
     RandCore,
     UnexpectedContinuationFrame,
+    EncodeSliceError(EncodeSliceError),
+}
+
+impl From<EncodeSliceError> for Error {
+    fn from(err: EncodeSliceError) -> Error {
+        Error::EncodeSliceError(err)
+    }
 }
 
 impl From<httparse::Error> for Error {
@@ -415,10 +423,12 @@ where
     ///
     /// ```
     /// use embedded_websocket as ws;
+    /// use core::str::FromStr;
+    /// use heapless::String;
     /// let mut buffer: [u8; 1000] = [0; 1000];
     /// let mut ws_server = ws::WebSocketServer::new_server();
-    /// let ws_key = ws::WebSocketKey::from("Z7OY1UwHOx/nkSz38kfPwg==");
-    /// let sub_protocol = ws::WebSocketSubProtocol::from("chat");
+    /// let ws_key: ws::WebSocketKey = String::from_str("Z7OY1UwHOx/nkSz38kfPwg==").unwrap();
+    /// let sub_protocol: ws::WebSocketSubProtocol = String::from_str("chat").unwrap();
     /// let len = ws_server
     ///     .server_accept(&ws_key, Some(&sub_protocol), &mut buffer)
     ///     .unwrap();
@@ -521,8 +531,10 @@ where
     /// # Examples
     /// ```
     /// use embedded_websocket as ws;
+    /// use core::str::FromStr;
+    /// use heapless::String;
     /// let mut ws_client = ws::WebSocketClient::new_client(rand::thread_rng());
-    /// let ws_key = ws::WebSocketKey::from("Z7OY1UwHOx/nkSz38kfPwg==");
+    /// let ws_key: ws::WebSocketKey = String::from_str("Z7OY1UwHOx/nkSz38kfPwg==").unwrap();
     /// let server_response_html = "HTTP/1.1 101 Switching Protocols\r\nConnection: Upgrade\r\nUpgrade: websocket\r\nSec-WebSocket-Protocol: chat\r\nSec-WebSocket-Accept: ptPnPeDOTo6khJlzmLhOZSh2tAY=\r\n\r\n";    ///
     /// let (len, sub_protocol) = ws_client.client_accept(&ws_key, server_response_html.as_bytes())
     ///     .unwrap();
@@ -1063,6 +1075,8 @@ fn build_client_disconnected_frame(num_bytes_from: usize) -> WebSocketFrame {
 #[cfg(test)]
 mod tests {
     extern crate std;
+    use core::str::FromStr;
+
     use super::*;
 
     #[test]
@@ -1134,8 +1148,8 @@ Upgrade: websocket
     fn server_accept_should_write_sub_protocol() {
         let mut buffer: [u8; 1000] = [0; 1000];
         let mut ws_server = WebSocketServer::new_server();
-        let ws_key = WebSocketKey::from("Z7OY1UwHOx/nkSz38kfPwg==");
-        let sub_protocol = WebSocketSubProtocol::from("chat");
+        let ws_key: WebSocketKey = String::from_str("Z7OY1UwHOx/nkSz38kfPwg==").unwrap();
+        let sub_protocol: WebSocketSubProtocol = String::from_str("chat").unwrap();
         let size = ws_server
             .server_accept(&ws_key, Some(&sub_protocol), &mut buffer)
             .unwrap();
