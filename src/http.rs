@@ -1,4 +1,6 @@
 use super::*;
+use base64::Engine;
+use core::str::FromStr;
 use heapless::{String, Vec};
 
 // NOTE: this struct is re-exported
@@ -54,13 +56,13 @@ pub fn read_http_header<'a>(
                         // it is safe to unwrap here because we have checked
                         // the size of the list beforehand
                         sec_websocket_protocol_list
-                            .push(String::from(item))
+                            .push(String::from_str(item)?)
                             .unwrap();
                     }
                 }
             }
             "Sec-WebSocket-Key" => {
-                sec_websocket_key = String::from(str::from_utf8(value)?);
+                sec_websocket_key = String::from_str(str::from_utf8(value)?)?;
             }
             &_ => {
                 // ignore all other headers
@@ -111,7 +113,8 @@ pub fn read_server_connect_handshake_response(
                         }
                     }
                     "Sec-WebSocket-Protocol" => {
-                        sec_websocket_protocol = Some(String::from(str::from_utf8(item.value)?));
+                        sec_websocket_protocol =
+                            Some(String::from_str(str::from_utf8(item.value)?)?);
                     }
                     _ => {
                         // ignore all other headers
@@ -135,8 +138,8 @@ pub fn build_connect_handshake_request(
 
     let mut key: [u8; 16] = [0; 16];
     rng.fill_bytes(&mut key);
-    base64::encode_config_slice(key, base64::STANDARD, &mut key_as_base64);
-    let sec_websocket_key: String<24> = String::from(str::from_utf8(&key_as_base64)?);
+    base64::engine::general_purpose::STANDARD.encode_slice(key, &mut key_as_base64)?;
+    let sec_websocket_key: String<24> = String::from_str(str::from_utf8(&key_as_base64)?)?;
 
     http_request.push_str("GET ")?;
     http_request.push_str(websocket_options.path)?;
@@ -212,6 +215,6 @@ pub fn build_accept_string(sec_websocket_key: &WebSocketKey, output: &mut [u8]) 
     let mut sha1 = Sha1::new();
     sha1.update(&accept_string);
     let input = sha1.finalize();
-    base64::encode_config_slice(input, base64::STANDARD, output); // no need for slices since the output WILL be 28 bytes
+    base64::engine::general_purpose::STANDARD.encode_slice(input, output)?;
     Ok(())
 }
