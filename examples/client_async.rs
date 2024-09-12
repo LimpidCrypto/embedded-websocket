@@ -5,7 +5,7 @@ use bytes::{BufMut, BytesMut};
 use tokio::net::TcpStream;
 use tokio_util::codec::{Decoder, Encoder, Framed};
 
-use embedded_websocket::{
+use embedded_websocket_embedded_io::{
     framer_async::{Framer, FramerError, ReadResult},
     WebSocketClient, WebSocketCloseStatusCode, WebSocketOptions, WebSocketSendMessageType,
 };

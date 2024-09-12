@@ -8,7 +8,7 @@
 // the client as well as responding to any opening and closing handshakes.
 // Note that we are using the standard library in the demo but the websocket library remains no_std
 
-use embedded_websocket as ws;
+use embedded_websocket_embedded_io as ws;
 use std::net::{TcpListener, TcpStream};
 use std::str::Utf8Error;
 use std::thread;

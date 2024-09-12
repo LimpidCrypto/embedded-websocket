@@ -9,7 +9,7 @@
 // Note that we are using the standard library in the demo and making use of the framer helper module
 // but the websocket library remains no_std (see client_full for an example without the framer helper module)
 
-use embedded_websocket::{
+use embedded_websocket_embedded_io::{
     framer::{Framer, FramerError, ReadResult},
     WebSocketClient, WebSocketCloseStatusCode, WebSocketOptions, WebSocketSendMessageType,
 };
