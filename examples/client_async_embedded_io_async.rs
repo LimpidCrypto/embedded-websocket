@@ -3,7 +3,7 @@ use std::error::Error;
 
 use tokio::net::TcpStream;
 
-use embedded_websocket::{
+use embedded_websocket_embedded_io::{
     framer_async::{Framer, FramerError, ReadResult},
     WebSocketClient, WebSocketCloseStatusCode, WebSocketOptions, WebSocketSendMessageType,
 };

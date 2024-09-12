@@ -1,11 +1,11 @@
 [package]
-name = "embedded-websocket"
+name = "embedded-websocket-embedded-io"
 version = "0.9.3"
-authors = ["David Haig"]
+authors = ["David Haig, Steffen Konermann <contact@limpidcrypto.com>"]
 edition = "2021"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/ninjasource/embedded-websockets.git"
-description = "A lightweight websocket library for embedded systems (no_std)"
+repository = "https://github.com/LimpidCrypto/embedded-websockets.git"
+description = "A fork of the embedded-websockets crate that uses embedded-io-async for async IO."
 keywords = ["websockets", "websocket", "embedded", "no_std"]
 categories = ["embedded", "no-std", "network-programming"]
 readme = "README.md"
