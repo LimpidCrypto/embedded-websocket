@@ -18,12 +18,14 @@ httparse = { version = "1.9.4", default-features = false }
 rand_core = { version = "0.6.4", default-features = false }
 base64 = { version = "0.22.1", default-features = false }
 futures = { version = "0.3.30", default-features = false }
+embedded-io-async = { version = "0.6.1", default-features = false, optional = true }
 
 [dev-dependencies]
 rand = "0.8.5"
 bytes = "1.7.1"
 tokio = { version = "1.39.2", features = ["macros", "rt-multi-thread"] }
 tokio-util = { version = "0.7.11", features = ["net", "codec"] }
+embedded-io-adapters = { version = "0.6.1", features = ["tokio-1"] }
 
 # see readme for no_std support
 [features]
